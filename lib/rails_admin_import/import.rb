@@ -107,7 +107,7 @@ module RailsAdminImport
             object = self.import_initialize(row, map, update)
             object.import_belongs_to_data(associated_map, row, map)
             object.import_many_data(associated_map, row, map)
-            object.before_import_save(row, map)
+            object.before_import_save(row, map, params)
   
             object.import_files(row, map)
 
@@ -116,7 +116,7 @@ module RailsAdminImport
               if object.save
                 logger.info "#{Time.now.to_s}: #{verb}d: #{object.send(label_method)}"
                 results[:success] << "#{verb}d: #{object.send(label_method)}"
-                object.after_import_save(row, map)
+                object.after_import_save(row, map, params)
               else
                 logger.info "#{Time.now.to_s}: Failed to #{verb}: #{object.send(label_method)}. Errors: #{object.errors.full_messages.join(', ')}."
                 results[:error] << "Failed to #{verb}: #{object.send(label_method)}. Errors: #{object.errors.full_messages.join(', ')}."
